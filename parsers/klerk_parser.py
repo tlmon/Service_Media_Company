@@ -53,4 +53,4 @@ if __name__ == "__main__":
     file_name = os.path.join(file_dir, '../data/kelrk_news.json')
     with open(file_name, 'w+') as outfile:
         json.dump(res, outfile)
-    print('Parsing klerk.ru finished. Data load to kelrk_news.json.')
+    print('Finish parsing klerk.ru.')

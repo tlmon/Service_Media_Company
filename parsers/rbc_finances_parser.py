@@ -53,16 +53,17 @@ def parse_rbc_news(days=1):
                     print(e, url)
         else:
             return ress
-        
-            
-            
 
-if __name__ == "__main__":
+
+def main():
     print('Start parsing rbc finances.')
     res = parse_rbc_news(365)
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     file_name = os.path.join(file_dir, '../data/rbc_finances_news.json')
     with open(file_name, 'w+') as outfile:
         json.dump(res, outfile)
-    print('Parsing rbc finances finished. Data load to rbc_finances_news.json.')
-    
+    print('Finish parsing rbc finances.')
+            
+
+if __name__ == "__main__":
+    main()

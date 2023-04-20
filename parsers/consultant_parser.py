@@ -17,11 +17,10 @@ headers.update(
 month_enum = {'янв': 1, 'фев': 2, 'мар': 3, 'апр': 4, 'мая': 5, 'июн': 6,
     'июл': 7, 'авг': 8, 'сен': 9, 'окт': 10, 'ноя': 11, 'дек': 12} 
 
+
 def parse_consultant_news():
-    page_number = 1
     ress = []
     response = rq.get(CONSULTANT_NEWS_URL, headers=headers)
-    page_number += 1
     
     if (response.status_code == 200):
         news_urls = re.findall('legalnews/[\d]*/', response.text)
@@ -52,11 +51,15 @@ def parse_consultant_news():
     return sorted(ress, key=lambda d: -d['timestamp'])
             
 
-if __name__ == "__main__":
+def main():
     print('Start parsing consultant.')
     res = parse_consultant_news()
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     file_name = os.path.join(file_dir, '../data/consultant_news.json')
     with open(file_name, 'w+') as outfile: 
         json.dump(res, outfile)
-    print('Parsing consultant finished. Data load to consultant_news.json.')
+    print('Finish parsing consultant.')
+
+
+if __name__ == "__main__":
+    main()
