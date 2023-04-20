@@ -73,12 +73,16 @@ def get_cfo_days(days):
     return list(filter(lambda i : time_begin <= i["timestamp"], res))
 
 
-if __name__ == "__main__":
+def main():
     print('Start parsing cfo-russia.ru.')
     res = get_cfo_days(2)
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     file_name = os.path.join(file_dir, '../data/cfo_news.json')
     with open(file_name, 'w+') as outfile:
         json.dump(res, outfile)
-    print('Parsing cfo-russia.ru finished. Data load to cfo_news.json.')
+    print('Finish parsing cfo-russia.ru.')
+
+
+if __name__ == "__main__":
+    main()
     
