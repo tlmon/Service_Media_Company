@@ -4,7 +4,7 @@
 
 Cервис для конкурентного анализа на основе машинного обучения для медиакомпании.
 
-## Recruitments:
+## Requirements:
 
 ### For parsers:
 pip3 install beautifulsoup4 requests datetime
