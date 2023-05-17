@@ -24,8 +24,8 @@ def parse_klerk_news(days=1):
                     news = rq.get(url).text
                     soup = bs(news, 'html.parser')
                     res['site'] = 'klerk'
-                    res['title'] = soup.body.find("h1").text.replace("\xa0", " ").replace("\t", " ")
-                    res['text'] = soup.body.find(class_="article__content").text.replace("\xa0", " ").replace("\t", " ")
+                    res['title'] = soup.body.find("h1")  .text.replace("\xa0", " ").replace("\t", " ")
+                    res['text'] = soup.body.find(id="article-content").text.replace("\xa0", " ").replace("\t", " ")
                     try:
                         res['description'] = soup.body.find(class_="article__resume").text.replace("\xa0", " ").replace("\t", " ")
                     except:
@@ -33,7 +33,7 @@ def parse_klerk_news(days=1):
                             res['description'] = res['text'][:100] + '...'
                         else:
                             res['description'] = res['text']
-                    date_raw = re.findall('\d{4}-\d+-\d+ \d+:\d+:\d+', str(soup.body.find(class_="status__block")))[0]
+                    date_raw = re.findall('\d{4}-\d+-\d+ \d+:\d+:\d+', str(soup.body.time))[0]
                     date, time = date_raw.split()
                     date = date.split('-')
                     time = time.split(':')
@@ -44,13 +44,14 @@ def parse_klerk_news(days=1):
                 except Exception as e:
                     print(e, 'url:', url)
             
-            
-
-if __name__ == "__main__":
+def main():   
     print('Start parsing klerk.ru')
     res = parse_klerk_news(2)
     file_dir = os.path.dirname(os.path.realpath('__file__'))
     file_name = os.path.join(file_dir, '../data/kelrk_news.json')
     with open(file_name, 'w+') as outfile:
         json.dump(res, outfile)
-    print('Finish parsing klerk.ru.')
+    print('Finish parsing klerk.ru.')         
+
+if __name__ == "__main__":
+   main()
