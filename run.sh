@@ -1,3 +1,3 @@
 #!/bin/bash
 
-python3 ./routes.py
+python3 ./routes.py 
