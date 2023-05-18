@@ -26,16 +26,17 @@ def start(message):
 
 @bot.message_handler(content_types='text')
 def message_reply(message):
+    wait_mesage_text = 'Ваш запрос обрабатывается, подождите...'
     if message.text=="Тренды":
-        mes = bot.send_message(message.chat.id, 'Ваш запрос обрабатывается, подождите...')
+        wait_mesage = bot.send_message(message.chat.id, wait_mesage_text)
         trends = get_trends()
-        bot.delete_message(message.chat.id, mes.message_id)
+        bot.delete_message(message.chat.id, wait_mesage.message_id)
         bot.send_message(message.chat.id, trends)
         
     elif message.text=="Инсайты":
-        mes = bot.send_message(message.chat.id, 'Ваш запрос обрабатывается, подождите...')
+        wait_mesage = bot.send_message(message.chat.id, wait_mesage_text)
         insights = get_insights()
-        bot.delete_message(message.chat.id, mes.message_id)
+        bot.delete_message(message.chat.id, wait_mesage.message_id)
         bot.send_message(message.chat.id, insights)
         
 
