@@ -3,6 +3,7 @@ import json
 from datetime import datetime
 from digester import get_digest
 from importer import load
+import random
 from trender import calc_trends2
 
 app = Flask(__name__)
@@ -37,21 +38,23 @@ def get_digest_ceo():
 
 @app.route('/api/v0/trends', methods=['GET'])
 def get_digest_trends():
-    def get_body(val):
-        if (type(val) == list):
-            ans = []
-            for i in val:
-                ans += get_body(i)
-            return ans
-        else:
-            return [val]
-    trend = calc_trends2(load(), 180, 3)
+    trends_raw = calc_trends2(load(), 180, 3)
     response = []
-    for i in get_body(trend[1]):
+    keywords = trends_raw[0]
+    trends = trends_raw[1]
+    response = []
+    for n in range(len(keywords)):
+        parsed_trends = []
+        for group in trends[n]:
+            for trend in group:
+                if trend not in parsed_trends:
+                    parsed_trends.append(trend)
+        random.shuffle(parsed_trends)
         response.append({
-            'trend': i
-        })
-    return json.dumps(response[3:], ensure_ascii=False).encode('utf8')
+            'keyword': keywords[n],
+            'trends': parsed_trends
+        })        
+    return json.dumps(response, ensure_ascii=False).encode('utf8')
 
 @app.route('/api/v0/insights', methods=['GET'])
 def get_digest_insights():
@@ -63,9 +66,10 @@ def get_digest_insights():
             return list(ans)
         else:
             return [val]
-    insight = calc_trends2(load(), 3, 3)
+    insights_raw = calc_trends2(load(), 3, 3)
+    keywords = insights_raw[0]
     response = []
-    for i in get_body(insight[1]):
+    for i in get_body(insights_raw[1]):
         response.append({
             'insight': i
         })
