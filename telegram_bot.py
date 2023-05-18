@@ -55,7 +55,6 @@ def get_trends():
         for trend in trend['trends'][:3]:
             result +=  '• ' + trend + '\n'
         number += 1
-    result += '\n\n'
     return result
 
 
