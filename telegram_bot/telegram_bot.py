@@ -1,13 +1,12 @@
 from telegram_token import token # telegram bot token
 import telebot
 from telebot import types
-import requests as rq
-import json
+from messages import get_trends_message, get_insights_message
 
 bot = telebot.TeleBot(token, parse_mode=None) 
 
 
-@bot.message_handler(commands=['start', 'help', 'info'])
+@bot.message_handler(commands=['start'])
 def start(message):
     button_trends = types.KeyboardButton("Тренды")
     button_insigths = types.KeyboardButton("Инсайты")
@@ -29,54 +28,15 @@ def message_reply(message):
     wait_mesage_text = 'Ваш запрос обрабатывается, подождите...'
     if message.text=="Тренды":
         wait_mesage = bot.send_message(message.chat.id, wait_mesage_text)
-        trends = get_trends()
+        trends = get_trends_message()
         bot.delete_message(message.chat.id, wait_mesage.message_id)
         bot.send_message(message.chat.id, trends)
-        
     elif message.text=="Инсайты":
         wait_mesage = bot.send_message(message.chat.id, wait_mesage_text)
-        insights = get_insights()
+        insights = get_insights_message()
         bot.delete_message(message.chat.id, wait_mesage.message_id)
         bot.send_message(message.chat.id, insights)
         
 
-
-def get_trends():
-    response = rq.get('http://127.0.0.1:8080/api/v0/trends')
-    if response.status_code != 200:
-        return "Произошла ошибка. Попробуйте позже..."
-
-    result = "Тренды:\n"
-    number = 1     
-    for trend in json.loads(response.text):
-        result += str(number) + '. Теги:' 
-        for keyword in trend['keyword']:
-            result += ' #' + keyword
-        result += '\n'
-        for trend in trend['trends'][:3]:
-            result +=  '• ' + trend + '\n'
-        number += 1
-    return result
-
-
-def get_insights():
-    response = rq.get('http://127.0.0.1:8080/api/v0/insights')
-    if response.status_code != 200:
-        return "Произошла ошибка. Попробуйте позже..."
-
-    result = "Инсайты:\n"
-    number = 1     
-    for insight in json.loads(response.text)[:10]:
-        result += str(number) + '. ' + str.replace(insight['insight'], '\n', '') + '\n'
-        number += 1
-    return result
-
-
-def main():
-    print('Start telegram bot')
-
-    bot.infinity_polling()
-
-
 if __name__ == '__main__':
-    main()
+    bot.infinity_polling()
