@@ -1,3 +1,5 @@
 #!/bin/bash
 
-python3 ./telegram_bot.py 
+w=$(dirname $(readlink -f "$0"))
+
+python3 $w/telegram_bot/telegram_bot.py 

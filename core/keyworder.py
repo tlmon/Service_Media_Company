@@ -1,6 +1,5 @@
 import math
 
-
 def idf_precalc(keyword_groups_list):
     from collections import defaultdict
     df_counts = defaultdict(lambda: 0)
@@ -10,13 +9,11 @@ def idf_precalc(keyword_groups_list):
             documents_count += 1
             for key in document:
                 df_counts[key] += 1
-    
     idf_counts = {}
     for word in df_counts:
         idf_counts[word] = math.log2(documents_count / df_counts[word])
-        # idf_counts[word] = math.log2(math.log2(documents_count / df_counts[word]))
-            
     return idf_counts
+
 
 def tf_idf(documents, idfs):
     res = []
@@ -24,15 +21,13 @@ def tf_idf(documents, idfs):
         total_words_count = 0
         for key in document:
             total_words_count += document[key]["count"]
-        
         rres = {}
         for key in document:
             rres[key] = document[key].copy()
             rres[key]["count"] = 1 * idfs[key]
-            # rres[key]["count"] = rres[key]["count"] / total_words_count * idfs[key]
-            
         res.append(rres)
     return res
+
 
 def keywords_sum(documents):
     res = {}
@@ -52,15 +47,16 @@ def keywords_norm(documents):
         for key in document:
             res[key] = document[key].copy()
             res[key]["count"] = 1
-        rres.append(res)
-        
+        rres.append(res)     
     return rres
+
 
 def keywords_mean(documents):
     res = keywords_sum(documents)
     for key in res:
         res[key]["count"] /= len(documents)
     return res
+
 
 def most_popular_keywords(document, count):
     res = []
@@ -70,7 +66,6 @@ def most_popular_keywords(document, count):
     return res[:count]
 
 
-# left - right
 def keywords_diff(left, right):
     res = left.copy()
     for key in right:
@@ -80,7 +75,3 @@ def keywords_diff(left, right):
         else:
             res[key]["count"] -= right[key]["count"]
     return res
-
-
-# idfs = idf_precalc([keyword_groups_before, keyword_groups_after])
-# most_popular_keywords(keywords_sum(tf_idf(keyword_groups_before, idfs)), 10)

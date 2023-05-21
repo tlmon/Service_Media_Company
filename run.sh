@@ -1,3 +1,5 @@
 #!/bin/bash
 
-python3 ./routes.py 
+w=$(dirname $(readlink -f "$0"))
+
+python3 $w/core/routes.py
