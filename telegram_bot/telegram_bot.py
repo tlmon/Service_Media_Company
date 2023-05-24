@@ -15,7 +15,7 @@ def start(message):
     markup.add(button_trends)
     markup.add(button_insigths)
     
-    part1 = "Что вы хоитите получить?"
+    part1 = "Что вы хотите получить?"
     part2 = "\nТренд - это долгосрочный (180 дней) объект обсуждения или направление развития."
     part3 = "\nИнсайт - это краткосрочное (до 3 дней) событие или открытие, которое предоставляет новую информацию."
     message_text = part1 + part2 + part3
@@ -36,7 +36,9 @@ def message_reply(message):
         insights = get_insights_message()
         bot.delete_message(message.chat.id, wait_mesage.message_id)
         bot.send_message(message.chat.id, insights)
-        
+    else:
+        error_text = 'Неизвестная команда. Используйте кнопки для запроса.'
+        bot.send_message(message.chat.id, error_text)
 
 if __name__ == '__main__':
     bot.infinity_polling()

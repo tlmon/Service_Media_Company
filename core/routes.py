@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/api/v0/trends', methods=['GET'])
 def trends():
-    trends =  get_trends(days=180, count=3)
+    trends = get_trends(days=180, count=3)
     trends_dumped = json.dumps(trends, ensure_ascii=False).encode('utf8')
     return trends_dumped
 

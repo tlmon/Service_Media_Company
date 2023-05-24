@@ -22,7 +22,7 @@ def tokenize(text):
     return res
 
 
-def keywords_calc(text, filt=None):
+def keywords_calc(text):
     words = tokenize(text)
     res = {}
     for word in words:
@@ -33,8 +33,6 @@ def keywords_calc(text, filt=None):
                 continue
             normal = normal[0]
             if normal.tag.POS == "INFN" or normal.tag.POS == "VERB" or normal.tag.POS == "ADJF":
-                continue
-            if filt and filt(normal):
                 continue
             res[short] = { 
                 "word": word, #normal.normal_form if normal.score > 0.5 else word,
@@ -58,6 +56,6 @@ def fitler_documents_with_words(keyword_groups, words):
     return res
 
 
-def keywords_groups_calc(data, filt=None, typ='text'):
-    keywords_groups = Parallel(n_jobs=16)(delayed(keywords_calc)(i[typ], filt) for i in data)
+def keywords_groups_calc(data, type='text'):
+    keywords_groups = Parallel(n_jobs=16)(delayed(keywords_calc)(i[type]) for i in data)
     return fitler_documents_with_words(keywords_groups, ['онлайн-курс', 'сберинвестиц'])
